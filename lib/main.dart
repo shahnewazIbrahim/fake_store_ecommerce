@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'FakeStore',
         theme: ThemeData(
-          primarySwatch: Colors.teal,
+          colorSchemeSeed: Colors.teal,
           useMaterial3: true,
         ),
         home: const HomeScreen(),

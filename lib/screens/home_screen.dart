@@ -14,6 +14,8 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("FakeStore"),
+        backgroundColor: Colors.teal[600],
+        foregroundColor: Colors.white, // <- makes icons/text visible
         actions: [
           IconButton(
             icon: const Icon(Icons.shopping_cart),
