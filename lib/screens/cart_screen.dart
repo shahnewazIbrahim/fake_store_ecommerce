@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../providers/cart_provider.dart';
 
@@ -14,8 +15,28 @@ class CartScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Your Cart"),
-        backgroundColor: Colors.teal[600],
+        // backgroundColor: Colors.teal[600],
+        // foregroundColor: Colors.white, // <- makes icons/text visible
         foregroundColor: Colors.white,
+        // টেক্সট/আইকন সাদা
+        backgroundColor: Colors.transparent,
+        // gradient দেখাতে transparent
+        elevation: 0,
+        surfaceTintColor: Colors.transparent,
+        // M3 overlay সরালাম
+        systemOverlayStyle: SystemUiOverlayStyle.light,
+        flexibleSpace: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Colors.teal.shade800,
+                  Colors.teal.shade600,
+                  Colors.teal.shade400,
+                ],
+              ),
+            )),
       ),
       body: Column(
         children: [
