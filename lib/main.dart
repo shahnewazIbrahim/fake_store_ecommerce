@@ -1,3 +1,4 @@
+import 'package:fake_store_ecommerce/screens/main_shell.dart';
 import 'package:flutter/material.dart';
 import 'providers/wishlist_provider.dart';
 import 'screens/home_screen.dart';
@@ -27,7 +28,8 @@ class MyApp extends StatelessWidget {
           colorSchemeSeed: Colors.teal,
           useMaterial3: true,
         ),
-        home: const HomeScreen(),
+        // home: const HomeScreen(),
+        home: const MainShell(),
       ),
     );
   }

@@ -13,16 +13,17 @@ class AppBottomNav extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final labels = ['Home', 'Shopping', 'Wishlist', 'Account'];
+    // ✅ Shopping → Cart
+    final labels = ['Home', 'Cart', 'Wishlist', 'Account'];
     final inactive = [
       CupertinoIcons.house,
-      CupertinoIcons.bag,
+      CupertinoIcons.cart, // ← cart
       CupertinoIcons.heart,
       CupertinoIcons.person_crop_circle,
     ];
     final active = [
       CupertinoIcons.house_fill,
-      CupertinoIcons.bag_fill,
+      CupertinoIcons.cart_fill, // ← cart_fill
       CupertinoIcons.heart_fill,
       CupertinoIcons.person_crop_circle_fill,
     ];
@@ -68,48 +69,38 @@ class AppBottomNav extends StatelessWidget {
                       vertical: 10,
                     ),
                     decoration: BoxDecoration(
+                      // ✅ আপনার teal gradient
                       gradient: selected
                           ? const LinearGradient(
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
-                        // colors: [Color(0xFFFF8A00), Color(0xFFFF5C00)],
                         colors: [
                           Color(0xFF00695C),
                           Color(0xFF00897B),
                           Color(0xFF26A69A),
-                        ]
+                        ],
                       )
                           : null,
                       borderRadius: BorderRadius.circular(18),
                     ),
-                    child: selected
-                    // selected → capsule: icon + label (horizontal)
-                        ? Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                    // ✅ selected অবস্থায়ও vertical icon+label (আপনার মতো)
+                    child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(icon, size: 18, color: Colors.white),
-                        const SizedBox(width: 8),
-                        const SizedBox.shrink(),
-                        Text(
-                          labels[i],
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 12
-                          ),
+                        Icon(
+                          icon,
+                          size: selected ? 18 : 22, // আপনার সেটিং
+                          color: selected ? Colors.white : hint,
                         ),
-                      ],
-                    )
-                    // idle → small icon + label (vertical)
-                        : Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(icon, size: 22, color: hint),
                         const SizedBox(height: 4),
                         Text(
                           labels[i],
-                          style: TextStyle(fontSize: 11, color: hint),
+                          style: TextStyle(
+                            fontSize: selected ? 12 : 11, // আপনার সেটিং
+                            fontWeight:
+                            selected ? FontWeight.w600 : FontWeight.w400,
+                            color: selected ? Colors.white : hint,
+                          ),
                         ),
                       ],
                     ),
