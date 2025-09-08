@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../providers/cart_provider.dart';
+import '../widgets/app_bottom_nav.dart'; // ⬅️ add this
 
 class CartScreen extends StatelessWidget {
   const CartScreen({super.key});
@@ -15,29 +16,26 @@ class CartScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Your Cart"),
-        // backgroundColor: Colors.teal[600],
-        // foregroundColor: Colors.white, // <- makes icons/text visible
         foregroundColor: Colors.white,
-        // টেক্সট/আইকন সাদা
         backgroundColor: Colors.transparent,
-        // gradient দেখাতে transparent
         elevation: 0,
         surfaceTintColor: Colors.transparent,
-        // M3 overlay সরালাম
         systemOverlayStyle: SystemUiOverlayStyle.light,
         flexibleSpace: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  Colors.teal.shade800,
-                  Colors.teal.shade600,
-                  Colors.teal.shade400,
-                ],
-              ),
-            )),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Colors.teal.shade800,
+                Colors.teal.shade600,
+                Colors.teal.shade400,
+              ],
+            ),
+          ),
+        ),
       ),
+
       body: Column(
         children: [
           const SizedBox(height: 8),
@@ -45,131 +43,122 @@ class CartScreen extends StatelessWidget {
             child: cart.cartItems.isEmpty
                 ? const Center(child: Text('Your cart is empty'))
                 : ListView.separated(
-                    padding: const EdgeInsets.all(12),
-                    itemCount: cart.cartItems.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: 10),
-                    itemBuilder: (context, index) {
-                      final item = cart.cartItems[index];
-                      final p = item.product;
-                      final productId = p.id is int
-                          ? p.id as int
-                          : int.tryParse('${p.id}') ?? -1;
+              padding: const EdgeInsets.all(12),
+              itemCount: cart.cartItems.length,
+              separatorBuilder: (_, __) => const SizedBox(height: 10),
+              itemBuilder: (context, index) {
+                final item = cart.cartItems[index];
+                final p = item.product;
+                final productId = p.id is int
+                    ? p.id as int
+                    : int.tryParse('${p.id}') ?? -1;
 
-                      return Card(
-                        elevation: 0.5,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          side: BorderSide(color: Colors.grey.shade300),
+                return Card(
+                  elevation: 0.5,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    side: BorderSide(color: Colors.grey.shade300),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: Image.network(
+                            p.image ?? '',
+                            width: 64,
+                            height: 64,
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, __, ___) =>
+                            const Icon(Icons.image_not_supported),
+                          ),
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(12),
-                          child: Row(
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              // Thumbnail
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(8),
-                                child: Image.network(
-                                  p.image ?? '',
-                                  width: 64,
-                                  height: 64,
-                                  fit: BoxFit.cover,
-                                  errorBuilder: (_, __, ___) =>
-                                      const Icon(Icons.image_not_supported),
+                              Text(
+                                p.title ?? 'Untitled',
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
                                 ),
                               ),
-                              const SizedBox(width: 12),
-
-                              // Title + Unit price + Qty stepper
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      p.title ?? 'Untitled',
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 6),
-                                    Text(
-                                      'Unit: \$${money(item.unitPrice)}',
-                                      style: TextStyle(
-                                        fontSize: 13,
-                                        color: Colors.grey.shade700,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 10),
-
-                                    // Qty stepper
-                                    Row(
-                                      children: [
-                                        IconButton(
-                                          icon: const Icon(
-                                              Icons.remove_circle_outline),
-                                          onPressed: productId == -1
-                                              ? null
-                                              : () => cart.decrement(productId),
-                                        ),
-                                        Text(
-                                          '${item.quantity}',
-                                          style: const TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                        IconButton(
-                                          icon: const Icon(
-                                              Icons.add_circle_outline),
-                                          onPressed: productId == -1
-                                              ? null
-                                              : () => cart.increment(productId),
-                                        ),
-                                        const SizedBox(width: 8),
-                                        IconButton(
-                                          onPressed: () =>
-                                              cart.removeFromCart(p),
-                                          icon:
-                                              const Icon(Icons.delete_outline),
-                                        )
-                                      ],
-                                    ),
-                                  ],
+                              const SizedBox(height: 6),
+                              Text(
+                                'Unit: \$${money(item.unitPrice)}',
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color: Colors.grey.shade700,
                                 ),
                               ),
-
-                              // Line subtotal (price * qty)
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
+                              const SizedBox(height: 10),
+                              Row(
                                 children: [
-                                  const Text(
-                                    'Subtotal',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.grey,
-                                    ),
+                                  IconButton(
+                                    icon: const Icon(
+                                        Icons.remove_circle_outline),
+                                    onPressed: productId == -1
+                                        ? null
+                                        : () => cart.decrement(productId),
                                   ),
                                   Text(
-                                    '\$${money(item.lineTotal)}',
+                                    '${item.quantity}',
                                     style: const TextStyle(
                                       fontSize: 16,
-                                      fontWeight: FontWeight.bold,
+                                      fontWeight: FontWeight.w600,
                                     ),
                                   ),
+                                  IconButton(
+                                    icon: const Icon(
+                                        Icons.add_circle_outline),
+                                    onPressed: productId == -1
+                                        ? null
+                                        : () => cart.increment(productId),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  IconButton(
+                                    onPressed: () =>
+                                        cart.removeFromCart(p),
+                                    icon:
+                                    const Icon(Icons.delete_outline),
+                                  )
                                 ],
                               ),
                             ],
                           ),
                         ),
-                      );
-                    },
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            const Text(
+                              'Subtotal',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey,
+                              ),
+                            ),
+                            Text(
+                              '\$${money(item.lineTotal)}',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
+                );
+              },
+            ),
           ),
-
-          // ---- Footer Summary ----
           if (cart.cartItems.isNotEmpty)
             Container(
               padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
@@ -226,6 +215,26 @@ class CartScreen extends StatelessWidget {
               ),
             ),
         ],
+      ),
+
+      // ✅ iOS-style bottom navigation added here
+      bottomNavigationBar: AppBottomNav(
+        currentIndex: 1, // Cart tab selected on this page
+        onTap: (i) {
+          switch (i) {
+            case 0:
+            // Home এ ফিরে যান
+              Navigator.of(context).popUntil((r) => r.isFirst);
+              break;
+            case 1:
+            // Already on Cart
+              break;
+            default:
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Coming soon')),
+              );
+          }
+        },
       ),
     );
   }

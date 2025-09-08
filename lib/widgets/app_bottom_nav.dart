@@ -72,18 +72,23 @@ class AppBottomNav extends StatelessWidget {
                           ? const LinearGradient(
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
-                        colors: [Color(0xFFFF8A00), Color(0xFFFF5C00)],
+                        // colors: [Color(0xFFFF8A00), Color(0xFFFF5C00)],
+                        colors: [
+                          Color(0xFF00695C),
+                          Color(0xFF00897B),
+                          Color(0xFF26A69A),
+                        ]
                       )
                           : null,
                       borderRadius: BorderRadius.circular(18),
                     ),
                     child: selected
                     // selected → capsule: icon + label (horizontal)
-                        ? Row(
+                        ? Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(icon, size: 22, color: Colors.white),
+                        Icon(icon, size: 18, color: Colors.white),
                         const SizedBox(width: 8),
                         const SizedBox.shrink(),
                         Text(
@@ -91,6 +96,7 @@ class AppBottomNav extends StatelessWidget {
                           style: const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.w600,
+                            fontSize: 12
                           ),
                         ),
                       ],
