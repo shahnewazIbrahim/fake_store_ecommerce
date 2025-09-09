@@ -1,14 +1,16 @@
-import 'package:fakestore_modern/providers/cart_provider.dart';
+// cart_tab.dart
+import 'package:fakestore_modern/common/utils/money.dart';
+import 'package:fakestore_modern/features/catalog/providers/cart_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:fakestore_modern/features/catalog/ui/home/checkout_sheet.dart';
 
 class CartTab extends StatelessWidget {
   const CartTab({super.key});
-  String money(num n) => n.toStringAsFixed(2);
 
   @override
   Widget build(BuildContext context) {
-    final cart = Provider.of<CartProvider>(context);
+    final cart = context.watch<CartProvider>();
 
     return Column(
       children: [
@@ -23,10 +25,6 @@ class CartTab extends StatelessWidget {
                   itemBuilder: (context, index) {
                     final item = cart.cartItems[index];
                     final p = item.product;
-                    final productId = p.id is int
-                        ? p.id as int
-                        : int.tryParse('${p.id}') ?? -1;
-
                     return Card(
                       elevation: 0.5,
                       shape: RoundedRectangleBorder(
@@ -41,7 +39,7 @@ class CartTab extends StatelessWidget {
                             ClipRRect(
                               borderRadius: BorderRadius.circular(8),
                               child: Image.network(
-                                p.image ?? '',
+                                p.image,
                                 width: 64,
                                 height: 64,
                                 fit: BoxFit.cover,
@@ -55,7 +53,7 @@ class CartTab extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    p.title ?? 'Untitled',
+                                    p.title,
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(
@@ -73,9 +71,9 @@ class CartTab extends StatelessWidget {
                                       IconButton(
                                         icon: const Icon(
                                             Icons.remove_circle_outline),
-                                        onPressed: productId == -1
-                                            ? null
-                                            : () => cart.decrement(productId),
+                                        onPressed: () => context
+                                            .read<CartProvider>()
+                                            .decrement(p.id),
                                       ),
                                       Text('${item.quantity}',
                                           style: const TextStyle(
@@ -84,15 +82,17 @@ class CartTab extends StatelessWidget {
                                       IconButton(
                                         icon: const Icon(
                                             Icons.add_circle_outline),
-                                        onPressed: productId == -1
-                                            ? null
-                                            : () => cart.increment(productId),
+                                        onPressed: () => context
+                                            .read<CartProvider>()
+                                            .increment(p.id),
                                       ),
                                       const SizedBox(width: 8),
                                       IconButton(
-                                        onPressed: () => cart.removeFromCart(p),
+                                        onPressed: () => context
+                                            .read<CartProvider>()
+                                            .remove(p),
                                         icon: const Icon(Icons.delete_outline),
-                                      ),
+                                      )
                                     ],
                                   ),
                                 ],
@@ -143,17 +143,22 @@ class CartTab extends StatelessWidget {
                 SizedBox(
                   height: 46,
                   child: ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.teal[600],
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                    ),
                     icon: const Icon(Icons.lock),
                     label: const Text('Proceed to Checkout',
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.w600)),
-                    onPressed: () {/* TODO: checkout */},
+                    onPressed: () {
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        useSafeArea: true,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.vertical(top: Radius.circular(16)),
+                        ),
+                        builder: (_) => const CheckoutSheet(),
+                      );
+                    },
                   ),
                 ),
               ],

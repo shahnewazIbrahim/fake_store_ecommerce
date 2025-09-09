@@ -1,5 +1,6 @@
+import 'package:fakestore_modern/features/cart/models/product.dart';
 import 'package:flutter/material.dart';
-import '../models/product.dart';
+
 import '../services/api_service.dart';
 
 class ProductProvider with ChangeNotifier {

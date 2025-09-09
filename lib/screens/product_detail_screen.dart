@@ -1,6 +1,7 @@
+import 'package:fakestore_modern/features/cart/models/product.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../models/product.dart';
+
 import '../providers/cart_provider.dart';
 
 class ProductDetailScreen extends StatelessWidget {
@@ -23,8 +24,8 @@ class ProductDetailScreen extends StatelessWidget {
             Text(product.title, style: Theme.of(context).textTheme.titleLarge),
             const SizedBox(height: 8),
             Text("\$${product.price}",
-                style: const TextStyle(
-                    fontSize: 20, fontWeight: FontWeight.bold)),
+                style:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             const SizedBox(height: 16),
             Text(product.description),
             const Spacer(),

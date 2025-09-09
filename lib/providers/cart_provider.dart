@@ -1,5 +1,5 @@
 // import 'package:flutter/material.dart';
-// import '../models/product.dart';
+// import 'package:fakestore_modern/features/cart/models/product.dart';
 //
 // class CartProvider with ChangeNotifier {
 //   final List<Product> _cartItems = [];
@@ -24,10 +24,10 @@
 //   }
 // }
 
-
 import 'dart:collection';
+
+import 'package:fakestore_modern/features/cart/models/product.dart'; // <-- your Product model (id, title, image, price)
 import 'package:flutter/foundation.dart';
-import '../models/product.dart'; // <-- your Product model (id, title, image, price)
 
 class CartItem {
   final Product product;
@@ -50,8 +50,7 @@ class CartProvider with ChangeNotifier {
   double get totalPrice =>
       _items.values.fold(0.0, (sum, it) => sum + it.lineTotal);
 
-  int get totalItems =>
-      _items.values.fold(0, (sum, it) => sum + it.quantity);
+  int get totalItems => _items.values.fold(0, (sum, it) => sum + it.quantity);
 
   int quantityFor(int productId) => _items[productId]?.quantity ?? 0;
 

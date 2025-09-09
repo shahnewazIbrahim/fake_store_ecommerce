@@ -1,6 +1,7 @@
 import 'dart:convert';
+
+import 'package:fakestore_modern/features/cart/models/product.dart';
 import 'package:http/http.dart' as http;
-import '../models/product.dart';
 
 class ApiService {
   static const String baseUrl = 'https://fakestoreapi.com/products';
