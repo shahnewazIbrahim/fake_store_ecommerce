@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:math';
 import 'package:http/http.dart' as http;
+import '../models/banner_item.dart';
 import '../models/product.dart';
 
 class ApiService {
@@ -33,5 +35,28 @@ class ApiService {
     } else {
       throw Exception("Failed to load category products");
     }
+  }
+
+  static Future<List<BannerItem>> fetchBanners({int limit = 6}) async {
+    final resp = await http.get(Uri.parse('$baseUrl?limit=$limit&sort=desc'));
+    if (resp.statusCode != 200) {
+      throw Exception('Failed to load banners');
+    }
+    final List list = jsonDecode(resp.body);
+    // কিছুটা শাফল করে নিলাম যেন ভ্যারাইটি আসে
+    list.shuffle(Random());
+
+    return list.map((item) {
+      final rawId = item['id'];
+      final int id = rawId is int
+          ? rawId
+          : (rawId is num ? rawId.toInt() : int.tryParse('$rawId') ?? -1);
+
+      return BannerItem(
+        productId: id,
+        image: '${item['image'] ?? ''}',
+        title: '${item['title'] ?? ''}',
+      );
+    }).where((b) => b.productId > 0 && b.image.isNotEmpty).toList();
   }
 }
