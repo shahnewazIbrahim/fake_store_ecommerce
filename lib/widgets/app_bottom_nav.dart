@@ -28,7 +28,7 @@ class AppBottomNav extends StatelessWidget {
       CupertinoIcons.person_crop_circle_fill,
     ];
 
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final scheme = Theme.of(context).colorScheme;
 
     return SafeArea(
       top: false,
@@ -37,16 +37,16 @@ class AppBottomNav extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surface,
+            color: scheme.surface,
             borderRadius: BorderRadius.circular(24),
             boxShadow: [
-              if (!isDark)
-                const BoxShadow(
-                  blurRadius: 16,
-                  offset: Offset(0, 8),
-                  color: Color(0x1A000000),
-                ),
+              BoxShadow(
+                blurRadius: 18,
+                offset: const Offset(0, 10),
+                color: Colors.black.withOpacity(.08),
+              ),
             ],
+            border: Border.all(color: scheme.outline.withOpacity(.6)),
           ),
           child: Row(
             children: List.generate(labels.length, (i) {
@@ -75,9 +75,8 @@ class AppBottomNav extends StatelessWidget {
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                         colors: [
-                          Color(0xFF00695C),
-                          Color(0xFF00897B),
-                          Color(0xFF26A69A),
+                          Color(0xFF0F766E),
+                          Color(0xFF14B8A6),
                         ],
                       )
                           : null,

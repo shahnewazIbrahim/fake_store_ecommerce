@@ -9,13 +9,20 @@ class CartTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cart = Provider.of<CartProvider>(context);
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
 
     return Column(
       children: [
         const SizedBox(height: 8),
         Expanded(
           child: cart.cartItems.isEmpty
-              ? const Center(child: Text('Your cart is empty'))
+              ? Center(
+                  child: Text(
+                    'Your cart is empty',
+                    style: theme.textTheme.titleMedium,
+                  ),
+                )
               : ListView.separated(
             padding: const EdgeInsets.all(12),
             itemCount: cart.cartItems.length,
@@ -26,10 +33,11 @@ class CartTab extends StatelessWidget {
               final productId = p.id is int ? p.id as int : int.tryParse('${p.id}') ?? -1;
 
               return Card(
-                elevation: 0.5,
+                elevation: 0,
+                color: scheme.surface,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  side: BorderSide(color: Colors.grey.shade300),
+                  borderRadius: BorderRadius.circular(16),
+                  side: BorderSide(color: scheme.outline.withOpacity(.7)),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(12),
@@ -38,12 +46,12 @@ class CartTab extends StatelessWidget {
                     children: [
                       ClipRRect(
                         borderRadius: BorderRadius.circular(8),
-                        child: Image.network(
-                          p.image ?? '',
-                          width: 64, height: 64, fit: BoxFit.cover,
-                          errorBuilder: (_, __, ___) => const Icon(Icons.image_not_supported),
+                          child: Image.network(
+                            p.image ?? '',
+                            width: 64, height: 64, fit: BoxFit.cover,
+                            errorBuilder: (_, __, ___) => const Icon(Icons.image_not_supported),
+                          ),
                         ),
-                      ),
                       const SizedBox(width: 12),
                       Expanded(
                         child: Column(
@@ -52,11 +60,15 @@ class CartTab extends StatelessWidget {
                             Text(
                               p.title ?? 'Untitled',
                               maxLines: 2, overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                              style: theme.textTheme.titleSmall?.copyWith(
+                                fontWeight: FontWeight.w700,
+                              ),
                             ),
                             const SizedBox(height: 6),
                             Text('Unit: \$${money(item.unitPrice)}',
-                                style: TextStyle(fontSize: 13, color: Colors.grey.shade700)),
+                                style: theme.textTheme.bodySmall?.copyWith(
+                                  color: scheme.onSurface.withOpacity(.65),
+                                )),
                             const SizedBox(height: 10),
                             Row(
                               children: [
@@ -83,9 +95,14 @@ class CartTab extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          const Text('Subtotal', style: TextStyle(fontSize: 12, color: Colors.grey)),
+                          Text('Subtotal',
+                              style: theme.textTheme.labelSmall?.copyWith(
+                                color: scheme.onSurface.withOpacity(.6),
+                              )),
                           Text('\$${money(item.lineTotal)}',
-                              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                              style: theme.textTheme.titleMedium?.copyWith(
+                                fontWeight: FontWeight.w800,
+                              )),
                         ],
                       ),
                     ],
@@ -99,8 +116,8 @@ class CartTab extends StatelessWidget {
           Container(
             padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
             decoration: BoxDecoration(
-              color: Colors.grey.shade50,
-              border: Border(top: BorderSide(color: Colors.grey.shade300)),
+              color: scheme.surface,
+              border: Border(top: BorderSide(color: scheme.outline.withOpacity(.7))),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -109,10 +126,14 @@ class CartTab extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text('Items: ${cart.totalItems}',
-                          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.w600,
+                          )),
                     ),
                     Text('Total: \$${money(cart.totalPrice)}',
-                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+                        style: theme.textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.w800,
+                        )),
                   ],
                 ),
                 const SizedBox(height: 10),
@@ -120,7 +141,7 @@ class CartTab extends StatelessWidget {
                   height: 46,
                   child: ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.teal[600], foregroundColor: Colors.white,
+                      backgroundColor: scheme.primary, foregroundColor: Colors.white,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                     ),
                     icon: const Icon(Icons.lock),

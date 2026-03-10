@@ -20,19 +20,32 @@ class _MainShellState extends State<MainShell> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
     return Scaffold(
       appBar: AppBar(
-        title: Text(_titles[_index]),
-        foregroundColor: Colors.white,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        surfaceTintColor: Colors.transparent,
+        title: Text(
+          _titles[_index],
+          style: theme.textTheme.titleLarge?.copyWith(
+            color: Colors.white,
+            fontWeight: FontWeight.w700,
+            letterSpacing: .2,
+          ),
+        ),
         systemOverlayStyle: SystemUiOverlayStyle.light,
         actions: _index == 1
             ? [] // Cart ট্যাবে কার্ট বাটন দেখানোর দরকার নেই
             : [
                 IconButton(
-                  icon: const Icon(Icons.shopping_cart),
+                  icon: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(.18),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: Colors.white24),
+                    ),
+                    child: const Icon(Icons.shopping_bag_outlined),
+                  ),
                   onPressed: () => setState(() => _index = 1),
                 ),
               ],
@@ -42,9 +55,9 @@ class _MainShellState extends State<MainShell> {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                Colors.teal.shade800,
-                Colors.teal.shade600,
-                Colors.teal.shade400,
+                scheme.primary.withOpacity(.95),
+                const Color(0xFF0B5F59),
+                const Color(0xFF0A3D3A),
               ],
             ),
           ),

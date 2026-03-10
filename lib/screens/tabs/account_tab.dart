@@ -70,9 +70,9 @@ class _AccountTabState extends State<AccountTab> {
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
-                  Colors.teal.shade800,
-                  Colors.teal.shade600,
-                  Colors.teal.shade400,
+                  scheme.primary.withOpacity(.95),
+                  const Color(0xFF0B5F59),
+                  const Color(0xFF0A3D3A),
                 ],
               ),
               borderRadius: BorderRadius.circular(16),
@@ -136,7 +136,7 @@ class _AccountTabState extends State<AccountTab> {
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
-                      foregroundColor: Colors.teal.shade700,
+                      foregroundColor: scheme.primary,
                       elevation: 0,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),

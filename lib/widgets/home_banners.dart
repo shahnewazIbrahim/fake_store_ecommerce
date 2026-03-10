@@ -41,7 +41,7 @@ class _HomeBannersState extends State<HomeBanners> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 160,
+      height: 180,
       child: FutureBuilder<List<BannerItem>>(
         future: _future,
         builder: (context, snap) {
@@ -135,6 +135,9 @@ class _BannerCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 6),
       child: GestureDetector(
@@ -160,9 +163,9 @@ class _BannerCard extends StatelessWidget {
               Container(
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                    colors: [Colors.black54, Colors.transparent],
+                    begin: Alignment.bottomLeft,
+                    end: Alignment.topRight,
+                    colors: [Color(0xCC0F172A), Color(0x0020232A)],
                   ),
                 ),
               ),
@@ -174,11 +177,32 @@ class _BannerCard extends StatelessWidget {
                   item.title,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
+                  style: theme.textTheme.titleMedium?.copyWith(
                     color: Colors.white,
-                    fontSize: 14,
                     fontWeight: FontWeight.w700,
-                    shadows: [Shadow(blurRadius: 6, color: Colors.black45)],
+                    shadows: const [
+                      Shadow(blurRadius: 10, color: Colors.black54)
+                    ],
+                  ),
+                ),
+              ),
+              Positioned(
+                left: 14,
+                bottom: 48,
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(.2),
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: Colors.white24),
+                  ),
+                  child: Text(
+                    'Shop now',
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
               ),
@@ -190,7 +214,7 @@ class _BannerCard extends StatelessWidget {
                   padding:
                   const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                   decoration: BoxDecoration(
-                    color: Colors.teal.withOpacity(.9),
+                    color: scheme.primary.withOpacity(.9),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: const Text(

@@ -1,10 +1,10 @@
 import 'package:fake_store_ecommerce/screens/main_shell.dart';
 import 'package:flutter/material.dart';
 import 'providers/wishlist_provider.dart';
-import 'screens/home_screen.dart';
 import 'providers/product_provider.dart';
 import 'providers/cart_provider.dart';
 import 'package:provider/provider.dart';
+import 'utils/app_theme.dart';
 
 void main() {
   runApp(const MyApp());
@@ -24,11 +24,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'FakeStore',
-        theme: ThemeData(
-          colorSchemeSeed: Colors.teal,
-          useMaterial3: true,
-        ),
-        // home: const HomeScreen(),
+        theme: AppTheme.light(),
         home: const MainShell(),
       ),
     );

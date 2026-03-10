@@ -14,6 +14,8 @@ class WishlistTab extends StatelessWidget {
   Widget build(BuildContext context) {
     final cart = Provider.of<CartProvider>(context);
     final wish = Provider.of<WishlistProvider>(context);
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
 
     // আপনার প্রোভাইডারে যেটা আছে সেটি ব্যবহার করুন:
     final List<Product> items = wish.wishlist;
@@ -33,10 +35,11 @@ class WishlistTab extends StatelessWidget {
               final inCart = cart.isInCart(p);
 
               return Card(
-                elevation: 0.5,
+                elevation: 0,
+                color: scheme.surface,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  side: BorderSide(color: Colors.grey.shade300),
+                  borderRadius: BorderRadius.circular(16),
+                  side: BorderSide(color: scheme.outline.withOpacity(.7)),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(12),
@@ -63,17 +66,15 @@ class WishlistTab extends StatelessWidget {
                               p.title,
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
+                              style: theme.textTheme.titleSmall?.copyWith(
+                                fontWeight: FontWeight.w700,
                               ),
                             ),
                             const SizedBox(height: 6),
                             Text(
                               '\$${money(p.price)}',
-                              style: TextStyle(
-                                fontSize: 13,
-                                color: Colors.grey.shade700,
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                color: scheme.onSurface.withOpacity(.65),
                               ),
                             ),
                             const SizedBox(height: 10),
@@ -86,7 +87,7 @@ class WishlistTab extends StatelessWidget {
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: inCart
                                           ? Colors.grey
-                                          : Colors.teal[600],
+                                          : scheme.primary,
                                       foregroundColor: Colors.white,
                                       shape: RoundedRectangleBorder(
                                         borderRadius:
@@ -154,17 +155,16 @@ class WishlistTab extends StatelessWidget {
           Container(
             padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
             decoration: BoxDecoration(
-              color: Colors.grey.shade50,
-              border: Border(top: BorderSide(color: Colors.grey.shade300)),
+              color: scheme.surface,
+              border: Border(top: BorderSide(color: scheme.outline.withOpacity(.7))),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
                   'Items: ${items.length}',
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -173,8 +173,8 @@ class WishlistTab extends StatelessWidget {
                     Expanded(
                       child: OutlinedButton.icon(
                         style: OutlinedButton.styleFrom(
-                          foregroundColor: Colors.teal[700],
-                          side: BorderSide(color: Colors.teal.shade700),
+                          foregroundColor: scheme.primary,
+                          side: BorderSide(color: scheme.primary),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -205,7 +205,7 @@ class WishlistTab extends StatelessWidget {
                     Expanded(
                       child: ElevatedButton.icon(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.teal[600],
+                          backgroundColor: scheme.primary,
                           foregroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
@@ -252,6 +252,7 @@ class _EmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -261,8 +262,9 @@ class _EmptyState extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             'Your wishlist is empty',
-            style:
-            TextStyle(fontSize: 16, color: Colors.grey.shade700),
+            style: theme.textTheme.titleMedium?.copyWith(
+              color: Colors.grey.shade700,
+            ),
           ),
         ],
       ),
